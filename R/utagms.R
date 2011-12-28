@@ -1,5 +1,3 @@
-library(Rsymphony)
-
 utagms <- function(performances, preferences, necessary=TRUE, strictVF=FALSE) {
   rel <- matrix(nrow=nrow(performances), ncol=nrow(performances))
 
@@ -10,7 +8,7 @@ utagms <- function(performances, preferences, necessary=TRUE, strictVF=FALSE) {
   }
   if (!is.null(rownames(performances))) {
     rownames(rel) <- rownames(performances)
-    colnames(rel) <- rownames(performances)    
+    colnames(rel) <- rownames(performances)
   }
   return(rel)
 }
@@ -29,16 +27,18 @@ checkRelation <- function(perf, preferences, a, b, necessary=TRUE, strictVF=FALS
   if (necessary == TRUE) {
     addConst <- buildStrongPreferenceConstraint(b, a, altVars)
   } else { ## possible
-    allConst <- buildWeakPreferenceConstraint(a, b, altVars)
+    addConst <- buildWeakPreferenceConstraint(a, b, altVars)
   }
   allConst <- combineConstraints(baseModel, addConst)
-  obj <- buildObjectiveFunction(perf)
-  ret <- Rsymphony_solve_LP(obj, allConst$lhs, allConst$dir, allConst$rhs, max=TRUE)
+  obj <- L_objective(buildObjectiveFunction(perf))
+  roiConst <- L_constraint(allConst$lhs, allConst$dir, allConst$rhs)
+  lp <- OP(objective=obj, constraints=roiConst, maximum=TRUE)
+  ret <- ROI_solve(lp, .solver)
 
   if (necessary == TRUE) {
-    return(ret$status != 0 || ret$objval <= 0)
+    return(ret$status$code != 0 || ret$objval <= 0)
   } else { # possible
-    return(ret$status == 0 && ret$objval > 0)
+    return(ret$status$code == 0 && ret$objval > 0)
   }
 }
 
@@ -152,6 +152,7 @@ buildFirstLevelZeroConstraints <- function(perf) {
 }
 
 buildMonotonousConstraints <- function(perf, strictVF=FALSE) {
+  
   stopifnot(is.logical(strictVF))
   
   levels <- getLevels(perf)
@@ -201,7 +202,7 @@ buildAltVariableMatrix <- function(perf) {
   
   for (i in seq(1:nrAlts)) {
     vec <- array(0, dim=nrVars)
-    indices <- sapply(seq(1:nrCrit), function(x) {which(levels[[x]] == perf[i,x])} )
+    indices <- sapply(seq(1:nrCrit), function(x) {which(levels[[x]] == perf[i,x])})
     vec[indices + offsets - 1] = 1
     resMat[i,] = vec
   }
