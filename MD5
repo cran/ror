@@ -1,11 +1,11 @@
-67caf0fe495cb2f0ff23135f4a6522b3 *DESCRIPTION
+e225c0b1fd6468009b027aa91a39a21d *DESCRIPTION
 7463d3906069694edfd0f5674d1ec64f *NAMESPACE
 ee8e50a93b3bfa6d8fc3c06112a5bf0d *R/commonsmath-utagms.R
 1883f708aa820b5b9a4e141f82f6c522 *R/onLoad.R
 076f66a2dcc06cd24f036ad745025b0f *R/ror_common.R
 1ec3fa1b147e0f1d1faefef0f1bbc087 *R/rorsmaa.R
 8229e6d59b5170434fe368755b8e286f *R/utagms.R
-fc80928fd0ef4b7639fad1506f48ac3a *inst/java/libror-0.4-jar-with-dependencies.jar
+9dbd6e0447611b99bb0cfd1b4b45aac7 *inst/java/libror-0.4.1-jar-with-dependencies.jar
 fd0e40c320656606449be9c86ce41e83 *man/ror-package.Rd
 559cf5760f2bcd98750ea149342f6042 *man/rorsmaa.Rd
 908254083edde1bb38cff93ac660f54a *man/utagms.Rd
