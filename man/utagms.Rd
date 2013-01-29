@@ -8,7 +8,7 @@
   preferability (=better).
 }
 \usage{utagms(performances, preferences, necessary=TRUE,
-strictVF=FALSE)}
+strictVF=FALSE, strongPrefs=TRUE)}
 \arguments{
 \item{performances}{m x n performance matrix with m alternatives
 and n criteria.}
@@ -19,7 +19,9 @@ to preferences[k,2].}
 \item{necessary}{Whether to compute the necessary relation (TRUE)
 or the possible one (FALSE).}
 \item{strictVF}{Whether to use sctrictly increasing (TRUE) or
-monotonously increasing (FALSE) value functions.}
+  monotonously increasing (FALSE) value functions.}
+\item{strongPrefs}{Whether the preference statements are strong (i.e. >,
+  with TRUE) or weak (i.e. >=, with FALSE).}
 }
 \keyword{robust}
 \seealso{rorsmaa,ror-package}
@@ -32,20 +34,30 @@ performances <- matrix(c(1.0, 1.0, 1.0, 2.0, 1.0, 1.1, 2.0, 0.5, 3.0), ncol=3, b
 preferences <- matrix(c(3, 2), ncol=2, byrow=TRUE)
 
 ## Necessary relation
-necrel <- utagms(performances, preferences, necessary=TRUE, strictVF=TRUE)
-## Possible relation
-posrel <- utagms(performances, preferences, necessary=FALSE, strictVF=FALSE)
+necrel <- utagms(performances, preferences, necessary=TRUE,
+strictVF=TRUE, strongPrefs=TRUE)
+## Possible relation with strictly increasing value functions
+posrel <- utagms(performances, preferences, necessary=FALSE,
+strictVF=FALSE, strongPrefs=TRUE)
 
 ## Sanity check, the necessary relation should be
 ## T F F
 ## T T F
 ## T T T
-stopifnot(necrel == matrix(c(TRUE, FALSE, FALSE, TRUE, TRUE, FALSE,
-TRUE, TRUE, TRUE), ncol=3, byrow=TRUE))
+stopifnot(necrel == matrix(c(TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, TRUE), ncol=3, byrow=TRUE))
 
 ## Sanity check, the possible relation should be
 ## T T F
 ## T T F
 ## T T T
 stopifnot(posrel == matrix(c(TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, TRUE), ncol=3, byrow=TRUE))
+
+\dontrun{
+## a3 > a2 and a2 > a3
+preferences <- matrix(c(3, 2, 2, 3), ncol=2, byrow=TRUE)
+
+## Error as the model is infeasible
+necrel <- utagms(performances, preferences, necessary=TRUE,
+strictVF=TRUE, strongPrefs=TRUE)
+}
 }
