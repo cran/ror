@@ -7,16 +7,14 @@
   assumes ascending preferences, i.e. higher criterion evaluation
   means higher preferability (=better).
 }
-\usage{rorsmaa(performances, preferences, necessary=TRUE)}
+\usage{rorsmaa(performances, preferences)}
 \arguments{
 \item{performances}{m x n performance matrix with m alternatives
 and n criteria}
 \item{preferences}{k x 2 matrix of preferences statements (row indices
 of alternatives in performance matrix). Each row
-r is a preference statements meaning that preferences[k,1] is preferred
+r is a preference statements meaning that preferences[k,1] is weakly preferred
 to preferences[k,2]}
-\item{necessary}{Whether to compute the necessary relation (TRUE)
-or the possible one (FALSE)}
 }
 \keyword{robust}
 \seealso{utagms,ror-package}
@@ -44,4 +42,11 @@ ror <- rorsmaa(performances, preferences)
 print(ror$poi)
 print(ror$rai)
 cat(ror$misses, "misses while generating 10k value functions\n")
+
+\dontrun{
+## Plot the results
+plot(ror$rai)
+plot(ror$poi)
+}
+
 }
